@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>叹月祝福语更新</title>
+    <style>
+        body { 
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .text-box {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 40px 20px;
+            margin: 30px 0;
+            font-size: 24px;
+            font-weight: bold;
+            word-break: break-all;
+        }
+        button {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 8px;
+        }
+        button:hover { background: #106ebe; }
+        .status {
+            margin-top: 20px;
+            color: green;
+            font-size: 14px;
+            min-height: 40px;
+        }
+        .counter { color: #666; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>📋 点击复制，自动切换</h2>
+    <div class="text-box" id="currentText">加载中...</div>
+    <button id="copyBtn">📋 复制并切换到下一条</button>
+    <button id="resetBtn">🔄 重置</button>
+    <div class="status" id="statusMsg"></div>
+    <div class="counter" id="counter">第 1 / ? 条</div>
+
+    <script>
+        // ========== 在这里修改你要复制的文字列表 ==========
+      const texts = [
+    "山野入怀满目皆春",
+    "春日郊野寻芳菲",
+    "是时候出门野餐了",
+    "天气晴今日宜快乐",
+    "天气逐渐热起来啦",
+    "我已经开始期待夏天了",
+    "季节交替大家注意身体",
+    "春暖花开祝福语如约而来",
+    "万物都在努力获得新生我也要加油",
+    "春天祝大家收获满满的幸运",
+    "阳光明媚正是野炊的好时候",
+    "绿是对春天应有的尊重",
+    "春日暖光美不胜收",
+    "春天我们都要好好播种幸福",
+    "春天真好万物复苏明朗可爱",
+    "两岸山花似雪开",
+    "家家春酒满银杯",
+    "苏溪亭上草漫漫",
+    "谁倚东风十二阑",
+    "燕子不归春事晚",
+    "一汀烟雨杏花寒",
+    "诗家清景在新春",
+    "绿柳才黄半未匀",
+    "若待上林花似锦",
+    "出门俱是看花人",
+    "三月踏青能几日",
+    "百回添酒莫辞频",
+    "看君到卧杨花里",
+    "始觉春光为醉人",
+    "芳洲拾翠暮忘归",
+    "秀野踏青来不定",
+    "行云去后遥山暝",
+    "已放笙歌池院静",
+    "双飞燕子几时回",
+    "夹岸桃花蘸水开",
+    "春雨断桥人不度",
+    "小舟撑出柳阴来",
+    "四野春工遍",
+    "柔风动赏心",
+    "踏青喧柳陌",
+    "举白醉花阴",
+    "春光无限好运动要趁早",
+    "愿人随春好春与人宜",
+    "一如既往万事胜意",
+    "春天是时间的起点",
+    "燕子北归嫩芽萌生",
+    "美好的一切都将从这里轮回",
+    "想要的东西都能得到",
+    "为春天干了这杯奶茶",
+    "愿你所见皆美好所爱皆无失",
+    "去踏青啦曹植终于可以吟诗了",
+    "出游踏青不负春光",
+    "春日如歌四月芳菲",
+    "祝大家的生活像花一样灿烂",
+    "一起净化心灵解放双眼吧",
+    "有道是最美人间四月天",
+    "拂堤杨柳醉春烟",
+    "犹趁东风放纸鸢",
+    "芳春无事只为花忙",
+    "又到了心花怒放的季节",
+    "坐下来听听花开的声音吧",
+    "春天适合努力",
+    "期待的事情都会发生",
+    "来一场说走就走的旅行吧",
+    "冬去春来桃红李白",
+    "青柳悠悠草长莺飞",
+    "刘备张飞关羽来个踏青三结义",
+    "张飞想带你放风筝",
+    "朕去踏青顺便看看自己的江山",
+    "踏青的风景哪有貂蝉美",
+    "想带蔡文姬去踏青",
+    "四月万物复苏跟蔡文姬一样可爱",
+    "踏青赏风景心情更舒畅",
+    "游山观水景身体更健康",
+    "踏青赏景好时节",
+    "快乐出游正当时",
+    "畅享自然之美",
+    "感受大自然的魅力",
+    "黄四娘家花满蹊",
+    "千朵万朵压枝低",
+    "留连戏蝶时时舞",
+    "自在娇莺恰恰啼",
+    "孤山寺北贾亭西",
+    "水面初平云脚低",
+    "几处早莺争暖树",
+    "谁家新燕啄春泥",
+    "乱花渐欲迷人眼",
+    "浅草才能没马蹄",
+    "最爱湖东行不足",
+    "绿杨阴里白沙堤",
+    "邓艾踏青发现伐蜀好路线",
+    "你们去踏青姜维守家",
+    "庞统要去踏青刷小怪了",
+    "曹丕要带我去踏青打猎",
+    "踏青季已到春色入画来",
+    "你们去踏青我要去统一三国",
+    "雨晴原草新",
+    "黄鸟恋行尘",
+    "桃花薰日红浓淡",
+    "柳叶迷烟翠浅深"
+];
+        // =============================================
+
+        let currentIndex = 0;      // 当前是第几条（从0开始）
+        const currentTextEl = document.getElementById('currentText');
+        const counterEl = document.getElementById('counter');
+        const statusMsgEl = document.getElementById('statusMsg');
+        const copyBtn = document.getElementById('copyBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // 更新页面显示
+        function updateDisplay() {
+            if (currentIndex < texts.length) {
+                currentTextEl.textContent = texts[currentIndex];
+                counterEl.textContent = `第 ${currentIndex + 1} / ${texts.length} 条`;
+            } else {
+                currentTextEl.textContent = '🎉 全部复制完毕！';
+                counterEl.textContent = `已完成 ${texts.length} / ${texts.length} 条`;
+            }
+        }
+
+        // 复制当前文字到剪贴板（兼容所有浏览器）
+        async function copyToClipboard(text) {
+            try {
+                // 现代浏览器推荐方式
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (err) {
+                // 降级方案（旧浏览器）
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                const success = document.execCommand('copy');
+                document.body.removeChild(textarea);
+                return success;
+            }
+        }
+
+        // 核心功能：复制当前文字，然后切换到下一条
+        async function copyAndNext() {
+            // 如果已经全部复制完了
+            if (currentIndex >= texts.length) {
+                statusMsgEl.textContent = '✅ 所有内容都已复制过了！点击重置可重新开始';
+                statusMsgEl.style.color = '#ff9800';
+                return;
+            }
+
+            const currentText = texts[currentIndex];
+            
+            // 1. 复制当前文字
+            const copySuccess = await copyToClipboard(currentText);
+            
+            if (copySuccess) {
+                // 2. 显示成功提示
+                statusMsgEl.textContent = `✅ 已复制：「${currentText.length > 30 ? currentText.substring(0, 30) + '...' : currentText}」`;
+                statusMsgEl.style.color = 'green';
+                
+                // 3. 切换到下一条
+                currentIndex++;
+                updateDisplay();
+                
+                // 4. 如果全部完成，显示特殊提示
+                if (currentIndex === texts.length) {
+                    statusMsgEl.innerHTML = '🎉 恭喜！所有内容已复制完成！<br>点击重置可重新开始';
+                }
+            } else {
+                statusMsgEl.textContent = '❌ 复制失败，请检查权限';
+                statusMsgEl.style.color = 'red';
+            }
+            
+            // 3秒后清除提示文字
+            setTimeout(() => {
+                if (statusMsgEl.textContent.includes('已复制') || statusMsgEl.textContent.includes('复制失败')) {
+                    statusMsgEl.textContent = '';
+                }
+            }, 2000);
+        }
+
+        // 重置功能：从第一条重新开始
+        function reset() {
+            currentIndex = 0;
+            updateDisplay();
+            statusMsgEl.textContent = '🔄 已重置，可以从第一条重新复制';
+            statusMsgEl.style.color = '#0078d4';
+            setTimeout(() => {
+                if (statusMsgEl.textContent.includes('已重置')) {
+                    statusMsgEl.textContent = '';
+                }
+            }, 1500);
+        }
+
+        // 绑定事件
+        copyBtn.addEventListener('click', copyAndNext);
+        resetBtn.addEventListener('click', reset);
+        
+        // 初始化显示
+        updateDisplay();
+    </script>
+</body>
+</html>
