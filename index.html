@@ -13,7 +13,30 @@
             text-align: center;
             background: #f8f9fa;
         }
-        h2 { font-size: 18px; margin: 6px 0 4px; font-weight: 600; color: #333; }
+        /* 方案三：呼吸灯变色特效 */
+        .custom-link {
+            display: inline-block;
+            margin: 8px 0 6px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            background: linear-gradient(90deg, #ff4d4d, #4caf50, #2196f3, #9c27b0, #ff4d4d);
+            background-size: 300% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: breatheColor 4s ease infinite;
+            transition: transform 0.2s;
+        }
+        @keyframes breatheColor {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .custom-link:hover, .custom-link:active {
+            transform: scale(1.02);
+        }
+        /* 原有样式 */
         .text-box {
             background: #ffffff;
             border-radius: 20px;
@@ -53,7 +76,12 @@
             font-size: 12px;
             min-height: 32px;
         }
-        .counter { color: #666; margin-top: 6px; font-size: 13px; font-weight: 500; }
+        .counter { 
+            color: #666; 
+            margin-top: 6px; 
+            font-size: 13px;
+            font-weight: 500;
+        }
         .jump-area {
             display: flex;
             gap: 6px;
@@ -74,14 +102,24 @@
             text-align: center;
             font-size: 15px;
         }
-        .jump-btn { background: #6c757d; padding: 8px 16px; font-size: 14px; }
+        .jump-btn {
+            background: #6c757d;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
         .list-container {
             margin-top: 20px;
             text-align: left;
             border-top: 1px solid #e9ecef;
             padding-top: 16px;
         }
-        .list-title { font-size: 16px; font-weight: bold; margin-bottom: 12px; text-align: center; color: #333; }
+        .list-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-align: center;
+            color: #333;
+        }
         .blessing-list {
             display: flex;
             flex-direction: column;
@@ -104,23 +142,53 @@
             gap: 10px;
             touch-action: manipulation;
         }
-        .blessing-item:active { transform: scale(0.98); background: #e8f4fd; }
-        .blessing-item.copied { background: #d4edda; border-color: #28a745; opacity: 0.9; }
-        .blessing-num { color: #0078d4; font-weight: 600; min-width: 36px; font-size: 14px; }
-        .blessing-text { color: #333; flex: 1; font-size: 15px; word-break: break-word; }
-        .copy-status { font-size: 12px; color: #999; min-width: 52px; text-align: right; font-weight: 500; }
-        .blessing-item.copied .copy-status { color: #28a745; }
+        .blessing-item:active {
+            transform: scale(0.98);
+            background: #e8f4fd;
+        }
+        .blessing-item.copied {
+            background: #d4edda;
+            border-color: #28a745;
+            opacity: 0.9;
+        }
+        .blessing-num {
+            color: #0078d4;
+            font-weight: 600;
+            min-width: 36px;
+            font-size: 14px;
+        }
+        .blessing-text {
+            color: #333;
+            flex: 1;
+            font-size: 15px;
+            word-break: break-word;
+        }
+        .copy-status {
+            font-size: 12px;
+            color: #999;
+            min-width: 52px;
+            text-align: right;
+            font-weight: 500;
+        }
+        .blessing-item.copied .copy-status {
+            color: #28a745;
+        }
         @media (max-width: 480px) {
             body { padding: 10px 14px; }
             .text-box { padding: 16px 10px; font-size: 18px; margin: 10px 0; }
             button { padding: 8px 14px; font-size: 14px; }
             .blessing-item { padding: 10px 12px; }
             .blessing-text { font-size: 14px; }
+            .custom-link { font-size: 16px; }
         }
     </style>
 </head>
 <body>
-    <h2>📋 点击复制，自动切换</h2>
+    <!-- 带呼吸灯变色特效的超级链接 -->
+    <a class="custom-link" href="https://app1.xin7.tech/bigclicker/publish/rbfQGsNgRt" target="_blank" rel="noopener noreferrer">
+        📢 点击查看放开三国2全自动日常任务脚本
+    </a>
+
     <div class="text-box" id="currentText">加载中...</div>
     <div class="button-group">
         <button id="copyBtn">📋 复制并切换到下一条</button>
