@@ -1,0 +1,26 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Pages repository
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.PAGES_TOKEN }}
+          external_repository: menglitanyue/menglitanyue.github.io
+          publish_branch: main
+          publish_dir: ./
+          commit_message: "deploy: ${{ github.sha }}"
