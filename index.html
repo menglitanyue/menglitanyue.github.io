@@ -43,7 +43,7 @@
             border: 1px solid #e9ecef; 
         }
         
-        /* 顶部工具栏：按钮 + 计数器 + 跳转控件 */
+        /* 顶部工具栏：按钮 + 计数器 + 跳转控件 + 重置（顺序调整） */
         .top-bar {
             display: flex;
             flex-wrap: wrap;
@@ -101,7 +101,7 @@
         }
         
         /* 列表部分 */
-        .list-container { margin-top: 16px; text-align: left; border-top: 1px solid #e9ecef; padding-top: 14px; }
+        .list-container { margin-top: 6px; text-align: left; border-top: 1px solid #e9ecef; padding-top: 8px; }
         .list-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; color: #333; }
         .blessing-list { display: flex; flex-direction: column; gap: 8px; max-height: 480px; overflow-y: auto; padding: 2px; }
         .blessing-item { background: white; padding: 10px 12px; border-radius: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid #e0e0e0; font-size: 14px; line-height: 1.4; display: flex; align-items: center; gap: 8px; }
@@ -136,15 +136,15 @@
     
     <div class="text-box" id="currentText">加载中...</div>
     
-    <!-- 合并后的工具栏：两个按钮 + 计数器 + 跳转 -->
+    <!-- 工具栏：顺序为 复制 → 计数器 → 跳转区域 → 重置 -->
     <div class="top-bar">
         <button id="copyBtn">复制</button>
-        <button id="resetBtn">重置</button>
         <div class="counter" id="counter"> 1 / ? 条</div>
         <div class="jump-area">
             <input type="number" id="jumpInput" class="jump-input" min="1" max="999" placeholder="数字">
             <button id="jumpBtn" class="jump-btn">跳 转</button>
         </div>
+        <button id="resetBtn">重置</button>
     </div>
     
     <!-- 状态提示栏已删除 -->
