@@ -7,7 +7,7 @@
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; max-width: 560px; margin: 0 auto; padding: 12px 16px; text-align: center; background: #f8f9fa; }
         
-        /* 渐变链接 - 保持原样，稍后调整边距 */
+        /* 渐变链接 */
         .custom-link { 
             display: inline-block; 
             margin: 0px 0 0px;
@@ -30,7 +30,7 @@
         }
         .custom-link:hover, .custom-link:active { transform: scale(1.02); }
         
-        /* 祝福语显示框 - 紧凑 */
+        /* 祝福语显示框 */
         .text-box { 
             background: #ffffff; 
             border-radius: 20px; 
@@ -43,7 +43,7 @@
             border: 1px solid #e9ecef; 
         }
         
-        /* 顶部工具栏：按钮 + 计数器 + 跳转控件 在一行 */
+        /* 顶部工具栏：按钮 + 计数器 + 跳转控件 */
         .top-bar {
             display: flex;
             flex-wrap: wrap;
@@ -100,15 +100,7 @@
             font-size: 12px !important;
         }
         
-        /* 状态提示 */
-        .status {
-            font-size: 12px;
-            min-height: 24px;
-            margin: 4px 0 6px;
-            color: green;
-        }
-        
-        /* 列表部分保持不变 */
+        /* 列表部分 */
         .list-container { margin-top: 16px; text-align: left; border-top: 1px solid #e9ecef; padding-top: 14px; }
         .list-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; color: #333; }
         .blessing-list { display: flex; flex-direction: column; gap: 8px; max-height: 480px; overflow-y: auto; padding: 2px; }
@@ -150,14 +142,12 @@
         <button id="resetBtn">重置</button>
         <div class="counter" id="counter"> 1 / ? 条</div>
         <div class="jump-area">
-           
             <input type="number" id="jumpInput" class="jump-input" min="1" max="999" placeholder="数字">
-            <span>条</span>
-            <button id="jumpBtn" class="jump-btn"> 转</button>
+            <button id="jumpBtn" class="jump-btn">跳 转</button>
         </div>
     </div>
     
-    <div class="status" id="statusMsg"></div>
+    <!-- 状态提示栏已删除 -->
     
     <a class="custom-link" href="jiaoben.html" target="_blank" rel="noopener noreferrer">📢 点击查看放开三国2全自动日常任务脚本</a>
     
@@ -171,7 +161,6 @@
         let texts = [], rawLines = [], copiedStatus = [], currentIndex = 0, isCopying = false;
         const currentTextEl = document.getElementById('currentText');
         const counterEl = document.getElementById('counter');
-        const statusMsgEl = document.getElementById('statusMsg');
         const copyBtn = document.getElementById('copyBtn');
         const resetBtn = document.getElementById('resetBtn');
         const jumpBtn = document.getElementById('jumpBtn');
@@ -223,9 +212,7 @@
                         isCopying = false;
                         if (ok) {
                             if (!copiedStatus[idx]) { copiedStatus[idx] = true; renderBlessingList(); }
-                            statusMsgEl.textContent = `✅ 已复制：${txt.length > 25 ? txt.slice(0,25)+'...' : txt}`;
-                            setTimeout(() => { if (statusMsgEl.textContent.includes('已复制')) statusMsgEl.textContent = ''; }, 1500);
-                        } else { statusMsgEl.textContent = '❌ 复制失败'; setTimeout(() => { if (statusMsgEl.textContent.includes('复制失败')) statusMsgEl.textContent = ''; }, 1500); }
+                        }
                     }
                 });
             });
@@ -270,8 +257,8 @@
         
         async function copyAndNext() {
             if (isCopying) return;
-            if (!texts.length) { statusMsgEl.textContent = '❌ 尚未加载完成'; return; }
-            if (currentIndex >= texts.length) { statusMsgEl.textContent = '✅ 已全部复制，点击重置可重新开始'; return; }
+            if (!texts.length) return;
+            if (currentIndex >= texts.length) return;
             if (texts[currentIndex] === '') {
                 currentIndex++;
                 updateDisplay();
@@ -284,12 +271,9 @@
             isCopying = false;
             if (ok) {
                 if (!copiedStatus[currentIndex]) { copiedStatus[currentIndex] = true; renderBlessingList(); }
-                statusMsgEl.textContent = `✅ 已复制：${txt.length > 30 ? txt.slice(0,30)+'...' : txt}`;
                 currentIndex++;
                 updateDisplay();
-                if (currentIndex === texts.length) statusMsgEl.innerHTML = '🎉 恭喜！所有内容已复制完成！<br>点击重置可重新开始';
-            } else { statusMsgEl.textContent = '❌ 复制失败'; }
-            setTimeout(() => { if (statusMsgEl.textContent.includes('已复制') || statusMsgEl.textContent.includes('复制失败')) statusMsgEl.textContent = ''; }, 1500);
+            }
         }
         
         function reset() { 
@@ -297,20 +281,16 @@
             copiedStatus.fill(false); 
             updateDisplay(); 
             renderBlessingList(); 
-            statusMsgEl.textContent = '🔄 已重置'; 
-            setTimeout(() => { if (statusMsgEl.textContent.includes('已重置')) statusMsgEl.textContent = ''; }, 1500); 
         }
         
         function jumpTo() {
             if (!texts.length) return;
             let t = parseInt(jumpInput.value);
-            if (isNaN(t)) { statusMsgEl.textContent = `⚠️ 请输入数字（1-${texts.length}）`; return; }
+            if (isNaN(t)) return;
             t = Math.max(1, Math.min(t, texts.length));
             currentIndex = t - 1;
             jumpInput.value = '';
             updateDisplay();
-            statusMsgEl.textContent = `🔍 已跳转到第 ${t} 条`;
-            setTimeout(() => { if (statusMsgEl.textContent.includes('已跳转到')) statusMsgEl.textContent = ''; }, 1500);
         }
         
         copyBtn.addEventListener('click', copyAndNext);
