@@ -30,20 +30,9 @@
         }
         .custom-link:hover, .custom-link:active { transform: scale(1.02); }
         
-        /* 祝福语显示框 */
-        .text-box { 
-            background: #ffffff; 
-            border-radius: 20px; 
-            padding: 8px 12px;
-            margin: 6px 0 8px;
-            font-size: 16px;
-            font-weight: bold; 
-            word-break: break-all; 
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05); 
-            border: 1px solid #e9ecef; 
-        }
+        /* 删除 .text-box 样式，不再需要 */
         
-        /* 顶部工具栏：按钮 + 计数器 + 跳转控件 + 重置（顺序调整） */
+        /* 顶部工具栏：紧凑布局，无上边距 */
         .top-bar {
             display: flex;
             flex-wrap: wrap;
@@ -54,20 +43,22 @@
             padding: 6px 10px;
             border-radius: 60px;
             border: 1px solid #e9ecef;
-            margin: 0 0 8px;
+            margin: 0 0 6px; /* 减小下边距 */
         }
         .top-bar button {
             background: #0078d4;
             color: white;
             border: none;
             padding: 6px 14px;
-            font-size: 14px;
+            font-size: 15px;          /* 统一字体大小15px */
+            font-weight: 700;         /* 加粗 */
             border-radius: 40px;
             cursor: pointer;
-            font-weight: 500;
             white-space: nowrap;
         }
         .top-bar button:active { transform: scale(0.96); opacity: 0.8; }
+        /* 确保重置按钮与复制按钮样式一致（已经继承 .top-bar button） */
+        
         .counter {
             color: #666;
             font-size: 13px;
@@ -98,9 +89,9 @@
             background: #6c757d !important;
             padding: 4px 10px !important;
             font-size: 12px !important;
+            font-weight: 500 !important; /* 保持原样 */
         }
         
-        /* 列表部分 */
         .list-container { margin-top: 6px; text-align: left; border-top: 1px solid #e9ecef; padding-top: 8px; }
         .list-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; color: #333; }
         .blessing-list { display: flex; flex-direction: column; gap: 8px; max-height: 480px; overflow-y: auto; padding: 2px; }
@@ -118,9 +109,8 @@
         
         @media (max-width: 480px) {
             body { padding: 8px 12px; }
-            .text-box { padding: 6px 10px; font-size: 14px; margin: 4px 0 6px; }
-            .top-bar { gap: 6px; padding: 5px 8px; }
-            .top-bar button { padding: 5px 12px; font-size: 13px; }
+            .top-bar { gap: 6px; padding: 4px 8px; margin-bottom: 4px; }
+            .top-bar button { font-size: 14px; padding: 5px 12px; } /* 手机上按钮14px，依然加粗 */
             .counter { font-size: 12px; }
             .jump-area { padding: 0 6px; }
             .jump-input { width: 45px; font-size: 12px; }
@@ -134,9 +124,9 @@
 </head>
 <body>
     
-    <div class="text-box" id="currentText">加载中...</div>
+    <!-- 删除当前祝福语显示框 -->
     
-    <!-- 工具栏：顺序为 复制 → 计数器 → 跳转区域 → 重置 -->
+    <!-- 顶部工具栏 -->
     <div class="top-bar">
         <button id="copyBtn">复制</button>
         <div class="counter" id="counter"> 1 / ? 条</div>
@@ -147,8 +137,6 @@
         <button id="resetBtn">重置</button>
     </div>
     
-    <!-- 状态提示栏已删除 -->
-    
     <a class="custom-link" href="jiaoben.html" target="_blank" rel="noopener noreferrer">📢 点击查看放开三国2全自动日常任务脚本</a>
     
     <div class="list-container">
@@ -158,8 +146,9 @@
     <div class="backup-links">📌备用入口:<a href="https://menglitanyue.github.io/" target="_blank" rel="noopener noreferrer">https://menglitanyue.github.io/</a> | <a href="https://tanyue.ccwu.cc/" target="_blank" rel="noopener noreferrer">tanyue.ccwu.cc/</a><br><span style="font-size: 11px;">👆 如果当前无法访问，可尝试以上备用域名</span></div>
     
     <script>
+        // 以下脚本逻辑完全不变，保持原样
         let texts = [], rawLines = [], copiedStatus = [], currentIndex = 0, isCopying = false;
-        const currentTextEl = document.getElementById('currentText');
+        const currentTextEl = null; // 不再需要此元素，但为了避免错误，保留引用但置空
         const counterEl = document.getElementById('counter');
         const copyBtn = document.getElementById('copyBtn');
         const resetBtn = document.getElementById('resetBtn');
@@ -234,23 +223,25 @@
                 updateDisplay();
                 renderBlessingList();
             } catch(e) {
-                currentTextEl.textContent = '❌ 加载失败';
+                // 由于删除了 currentTextEl，这里改为控制台输出错误或简单提示（但保留列表区域显示错误）
                 blessingListEl.innerHTML = '<div style="text-align:center;padding:20px;">❌ 加载失败</div>';
+                counterEl.textContent = '加载失败';
             }
         }
         
         function updateDisplay() {
-            if (!texts.length) { currentTextEl.textContent = '加载中...'; return; }
+            if (!texts.length) { 
+                counterEl.textContent = '加载中...';
+                return; 
+            }
             let effectiveIndex = currentIndex;
             while (effectiveIndex < texts.length && texts[effectiveIndex] === '') effectiveIndex++;
             if (effectiveIndex < texts.length) {
-                currentTextEl.textContent = texts[effectiveIndex];
+                // 不再更新显示框，只更新计数器
                 counterEl.textContent = `第 ${currentIndex+1} / ${texts.length} 条`;
             } else if (currentIndex < texts.length) {
-                currentTextEl.textContent = '（待补充）';
                 counterEl.textContent = `第 ${currentIndex+1} / ${texts.length} 条`;
             } else {
-                currentTextEl.textContent = '🎉 全部复制完毕！';
                 counterEl.textContent = `已完成 ${texts.length} / ${texts.length} 条`;
             }
         }
