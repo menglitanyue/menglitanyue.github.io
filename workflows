@@ -1,1 +1,22 @@
 
+name: Deploy to DigitalPlat
+
+on:
+  push:
+    branches:
+      - main  # 如果你本地的主分支是 master，就把这里改成 master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /htdocs/  # 注意这里！下面有详细解释
